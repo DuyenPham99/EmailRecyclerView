@@ -1,11 +1,13 @@
 package vn.hust.edu.emailrecyclerview;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -14,6 +16,8 @@ import android.widget.EditText;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.bloco.faker.Faker;
 
 public class MainActivity extends AppCompatActivity {
     List<ItemModel> listEmail;
@@ -29,15 +33,14 @@ public class MainActivity extends AppCompatActivity {
 
         keyword = findViewById(R.id.txt_keyword);
         favorite= findViewById(R.id.btn_favorite);
+        keyword.setInputType(InputType.TYPE_NULL);
 
+        Faker faker = new Faker();
         listEmail= new ArrayList<>();
-        listEmail.add(new ItemModel("Instructables","12:59 PM", "Modern Ceiling LED Lamp", "Musical Instruments to Make at Home, Origami Infinite Supernova", R.drawable.ic_star_normal));
-        listEmail.add(new ItemModel("Anstructables", "12:59 PM", "DropArt - Precision Two Drop Photographic Collider", "Musical Instruments to Make at Home, Origami Infinite Supernova", R.drawable.ic_star_normal));
-        listEmail.add(new ItemModel("Onstructables", "12:59 PM", "Easy Tensegrity Sculpture: Floating Table Top", "Musical Instruments to Make at Home, Origami Infinite Supernova", R.drawable.ic_star_normal));
-        listEmail.add(new ItemModel("Unstructables",  "12:59 PM", "Distance Learning With Tinkercad Contest ", "Musical Instruments to Make at Home, Origami Infinite Supernova", R.drawable.ic_star_normal));
-        listEmail.add(new ItemModel("Enstructables", "12:59 PM", "How to 3D Print a Surfboard", "Musical Instruments to Make at Home, Origami Infinite Supernova", R.drawable.ic_star_normal));
-        listEmail.add(new ItemModel("Dnstructables",  "12:59 PM", "Modern Ceiling LED Lamp", "Musical Instruments to Make at Home, Origami Infinite Supernova", R.drawable.ic_star_normal));
-        listEmail.add(new ItemModel("Pnstructables", "12:59 PM", "Easy Tensegrity Sculpture: Floating Table Top", "Musical Instruments to Make at Home, Origami Infinite Supernova", R.drawable.ic_star_normal));
+        for(int i=0; i<10; i++){
+            listEmail.add(new ItemModel(faker.name.name(), "12:30 PM", faker.lorem.sentence(), faker.lorem.paragraph(), R.drawable.ic_star_normal));
+        }
+
         //Khai báo RecycleView
         final RecyclerView recyclerView= (RecyclerView)findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
@@ -63,9 +66,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        keyword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                keyword.setInputType(InputType.TYPE_CLASS_TEXT);
+                keyword.setFocusableInTouchMode(true);
+            }
+        });
+
         favorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                favorite.requestFocus();
                 filterFavourite(isfavourite,listEmail);
                 isfavourite= (! isfavourite);
             }
